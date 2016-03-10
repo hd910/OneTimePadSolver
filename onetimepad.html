@@ -1,0 +1,67 @@
+<html>
+<head>
+<script>
+    var stringArray = new Array(7);
+    stringArray[0] = "00 A6 E2 57 2C 03 D7 6D C7 E2 14 F5 54 3A 28 19 DA FC 14 AE CA A3 EB 90 3C 0C";
+    stringArray[1] = "02 A7 EE 54 26 46 83 66 CD B7 1A E3 1D 29 3D 15 8E FB 51 EF 99 B2 F2 90 35 1D";
+    stringArray[2] = "01 A8 FC 52 26 44 83 71 D0 A3 0F F4 1D 29 2A 0E 9F BE 05 E1 D6 E2 F5 9A 2C 1D";
+    stringArray[3] = "05 A5 EE 52 26 44 83 75 CB A5 05 A7 5C 2C 2A 5C 98 FB 10 FB CD AB FB 80 34 1D";
+    stringArray[4] = "13 A8 F3 5F 27 40 C8 76 82 A3 04 E2 1D 2A 20 13 DA ED 1D E7 C9 B2 F8 87 21 1D";
+    stringArray[5] = "07 A0 F4 4F 21 4C CD 64 D0 BB 56 E6 49 2A 2E 1F 91 BE 02 FA D8 B0 E9 90 3C 1D";
+    stringArray[6] = "02 BB F2 1B 25 42 CD 7C 82 AC 03 F3 4E 7E 27 15 9E FA 14 E0 99 AA F8 87 3D 0C";
+    var alphabet = "a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z . , ! ?";    
+  
+    // var stringArray = new Array(7);
+    // stringArray[0] = "48 A6 E2 57 2C 03 D7 6D C7 E2 14 F5 54 3A 28 19 DA FC 14 AE CA A3 EB 90 3C 0C";
+    // stringArray[1] = "55 A7 EE 54 26 46 83 66 CD B7 1A E3 1D 29 3D 15 8E FB 51 EF 99 B2 F2 90 35 1D";
+    // stringArray[2] = "56 A8 FC 52 26 44 83 71 D0 A3 0F F4 1D 29 2A 0E 9F BE 05 E1 D6 E2 F5 9A 2C 1D";
+    // stringArray[3] = "48 A5 EE 52 26 44 83 75 CB A5 05 A7 5C 2C 2A 5C 98 FB 10 FB CD AB FB 80 34 1D";
+    // stringArray[4] = "55 A8 F3 5F 27 40 C8 76 82 A3 04 E2 1D 2A 20 13 DA ED 1D E7 C9 B2 F8 87 21 1D";
+    // stringArray[5] = "4F A0 F4 4F 21 4C CD 64 D0 BB 56 E6 49 2A 2E 1F 91 BE 02 FA D8 B0 E9 90 3C 1D";
+    // stringArray[6] = "49 BB F2 1B 25 42 CD 7C 82 AC 03 F3 4E 7E 27 15 9E FA 14 E0 99 AA F8 87 3D 0C";
+    // var alphabet = "a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z .;    
+  
+
+    for(var i = 0; i <stringArray.length; i ++){
+        stringArray[i] = stringArray[i].split(" ");
+    }
+
+    var alphabetSplit = alphabet.split(" ");
+    alphabetSplit[alphabetSplit.length] = " ";
+
+	function runscript(){
+        var position = document.getElementById('letter').value;
+        var stringToPrint = "";
+        for(var i = 0; i < alphabetSplit.length; i++){
+            var alphaBinary = parseInt((alphabetSplit[i].charCodeAt(0).toString(2)),2); 
+            stringToPrint += alphabetSplit[i] +" = "+ alphaBinary+ "<br/>";
+
+            stringToPrint += "---------------------" + "<br/>";
+            
+            var encryptedBinary = parseInt((((parseInt(stringArray[0][position],16))>>> 0).toString(2)),2);
+            var key = parseInt(parseInt(alphaBinary^encryptedBinary,10).toString(2),2); 
+            
+            for (var j = 0; j < 7;j++){
+                encryptedBinary = parseInt((((parseInt(stringArray[j][position],16))>>> 0).toString(2)),2);
+                var decode = parseInt(key^encryptedBinary,10).toString(2);
+                var decodeChar = String.fromCharCode(parseInt(decode, 2));
+                stringToPrint += stringArray[j][position]+"("+encryptedBinary+")" +" = " +decodeChar+ "<br/>";   
+            }
+            stringToPrint+="<br/> <br/>";
+        }
+        document.getElementById("content").innerHTML = stringToPrint;
+	}
+	
+</script>
+
+</head>
+<body>
+
+	<input type="text" id="letter"/>
+	<input type="button" onclick="runscript()" value="Test"/>
+    <div id="content">
+
+    </div>
+</body>
+
+</html>
